@@ -2,9 +2,11 @@ package br.com.tabelafipe.Consulta.main;
 
 import br.com.tabelafipe.Consulta.model.Dados;
 import br.com.tabelafipe.Consulta.model.Modelos;
+import br.com.tabelafipe.Consulta.model.Veiculo;
 import br.com.tabelafipe.Consulta.service.ConsumoApi;
 import br.com.tabelafipe.Consulta.service.ConverteDados;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -59,6 +61,7 @@ public class Main {
         endereco = endereco + "/" + codigoModelo + "/anos";
         json = consumoApi.obterDados(endereco);
         List<Dados> anos = converteDados.obterLista(json, Dados.class);
+        List<Veiculo> listaDePrecos = new ArrayList<>();
 
 //        var enderecoComModelo = converteDados.obterLista(json, Dados.class);
 //        enderecoComModelo.stream()
@@ -66,7 +69,11 @@ public class Main {
 //                .forEach(System.out::println);
 
         for (int i = 0; i < anos.size(); i++) {
-            
+            endereco = endereco + "/" + anos.get(i).codigo();
+            json = consumoApi.obterDados(endereco);
+            Veiculo veiculo = converteDados.obterDados(json, Veiculo.class);
+            listaDePrecos.add(veiculo);
         }
+        listaDePrecos.forEach(System.out::println);
     }
 }
